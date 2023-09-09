@@ -86,12 +86,10 @@ static public class AssignmentPart1
                 foreach (int value in pc.equipment)
                 {
                     sw.WriteLine($",{value}");
-                    Debug.Log(value);
                 }
 				sw.WriteLine(); // change to next line
 			}
 		}
-        
     }
 
 	static public void LoadPartyButtonPressed()
@@ -102,35 +100,39 @@ static public class AssignmentPart1
         {
             using (StreamReader sr = new StreamReader(partyDataFilePath))
             {
-                string line;
+				string line;
+
                 while ((line = sr.ReadLine()) != null)
                 {
                     string[] data = line.Split(',');
 
                     if (data.Length == 6)
-                    {
-                        int classID = int.Parse(data[0]);
-                        int health = int.Parse(data[1]);
-                        int mana = int.Parse(data[2]);
-                        int strength = int.Parse(data[3]);
-                        int agility = int.Parse(data[4]);
-                        int wisdom = int.Parse(data[5]);
+					{
+						int classID = int.Parse(data[0]);
+						int health = int.Parse(data[1]);
+						int mana = int.Parse(data[2]);
+						int strength = int.Parse(data[3]);
+						int agility = int.Parse(data[4]);
+						int wisdom = int.Parse(data[5]);
 
-                        PartyCharacter pc = new PartyCharacter(classID, health, mana, strength, agility, wisdom);
-                        
-                        GameContent.partyCharacters.AddLast(pc);
-                    }
-                }
-            }
+						PartyCharacter pc = new PartyCharacter(classID, health, mana, strength, agility, wisdom);
+
+						while ((line = sr.ReadLine()) != null && !string.IsNullOrWhiteSpace(line))
+						{
+							int equipmentValue = int.Parse(line.TrimStart(','));
+							pc.equipment.AddLast(equipmentValue);
+						}
+
+						GameContent.partyCharacters.AddLast(pc);
+					}
+				}
+			}
         }
-        else
-        {
+        else 
             Debug.Log("Failed to load file");
-        }
 
 		GameContent.RefreshUI();
     }
-
 }
 
 
