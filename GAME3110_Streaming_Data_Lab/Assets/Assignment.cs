@@ -7,6 +7,7 @@ pixel RPG characters created by Sean Browning.
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 
 
 #region Assignment Instructions
@@ -72,27 +73,62 @@ public partial class PartyCharacter
 
 static public class AssignmentPart1
 {
+    static private string partyDataFilePath = "partyData.txt";
 
-    static public void SavePartyButtonPressed()
+	static public void SavePartyButtonPressed()
     {
-        foreach (PartyCharacter pc in GameContent.partyCharacters)
+        using (StreamWriter sw = new StreamWriter(partyDataFilePath))
         {
-            Debug.Log("PC class id == " + pc.classID);
-        }
+			foreach (PartyCharacter pc in GameContent.partyCharacters)
+			{
+				sw.WriteLine($"{pc.classID},{pc.health},{pc.mana},{pc.strength},{pc.agility},{pc.wisdom}");
+                
+                foreach (int value in pc.equipment)
+                {
+                    sw.WriteLine($",{value}");
+                    Debug.Log(value);
+                }
+				sw.WriteLine(); // change to next line
+			}
+		}
+        
     }
 
-    static public void LoadPartyButtonPressed()
+	static public void LoadPartyButtonPressed()
     {
         GameContent.partyCharacters.Clear();
 
-        PartyCharacter pc = new PartyCharacter(1, 10, 10, 10, 10, 10);
-        GameContent.partyCharacters.AddLast(pc);
-        pc = new PartyCharacter(2, 11, 11, 11, 11, 11);
-        GameContent.partyCharacters.AddLast(pc);
-        pc = new PartyCharacter(3, 12, 12, 12, 12, 12);
-        GameContent.partyCharacters.AddLast(pc);
+        if (File.Exists(partyDataFilePath))
+        {
+            using (StreamReader sr = new StreamReader(partyDataFilePath))
+            {
+                string line;
+                while ((line = sr.ReadLine()) != null)
+                {
+                    string[] data = line.Split(',');
 
-        GameContent.RefreshUI();
+                    if (data.Length == 6)
+                    {
+                        int classID = int.Parse(data[0]);
+                        int health = int.Parse(data[1]);
+                        int mana = int.Parse(data[2]);
+                        int strength = int.Parse(data[3]);
+                        int agility = int.Parse(data[4]);
+                        int wisdom = int.Parse(data[5]);
+
+                        PartyCharacter pc = new PartyCharacter(classID, health, mana, strength, agility, wisdom);
+                        
+                        GameContent.partyCharacters.AddLast(pc);
+                    }
+                }
+            }
+        }
+        else
+        {
+            Debug.Log("Failed to load file");
+        }
+
+		GameContent.RefreshUI();
     }
 
 }
