@@ -206,7 +206,18 @@ public class SystemManager : MonoBehaviour
     {
 		AssignmentPart2.SavePartyButtonPressed();
 
-		partyNameInputField.GetComponent<InputField>().text = "";
+		// Get the text input field component
+		InputField inputField = partyNameInputField.GetComponent<InputField>();
+
+		// update dropdown label text to the inputField text
+		Dropdown dropdown = loadPartyDropDown.GetComponent<Dropdown>();
+		dropdown.GetComponentInChildren<Text>().text = inputField.text;
+
+		// update to current dropdown option from the options
+		dropdown.value = dropdown.options.Count;
+
+		// Clear the input field text
+		inputField.text = "";
 	}
 
 	public void NewButtonPressed()
