@@ -204,10 +204,12 @@ public class SystemManager : MonoBehaviour
 
     public void SaveButton2Pressed()
     {
-        AssignmentPart2.SavePartyButtonPressed();
-    }
+		AssignmentPart2.SavePartyButtonPressed();
 
-    public void NewButtonPressed()
+		partyNameInputField.GetComponent<InputField>().text = "";
+	}
+
+	public void NewButtonPressed()
     {
         //AssignmentPart2.NewPartyButtonPressed();
     }
