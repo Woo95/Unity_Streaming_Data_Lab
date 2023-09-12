@@ -39,17 +39,16 @@ Lab Part 1
 
 public partial class PartyCharacter
 {
-    public int classID;
+	public int classID;
 
-    public int health;
-    public int mana;
+	public int health;
+	public int mana;
 
-    public int strength;
-    public int agility;
-    public int wisdom;
+	public int strength;
+	public int agility;
+	public int wisdom;
 
-    public LinkedList<int> equipment;
-
+	public LinkedList<int> equipment;
 }
 
 
@@ -73,40 +72,40 @@ public partial class PartyCharacter
 
 static public class AssignmentPart1
 {
-    static private string partyDataFilePath = "partyData.txt";
+	static private string partyDataFilePath = "partyData.txt";
 
 	static public void SavePartyButtonPressed()
-    {
-        using (StreamWriter sw = new StreamWriter(partyDataFilePath))
-        {
+	{
+		using (StreamWriter sw = new StreamWriter(partyDataFilePath))
+		{
 			foreach (PartyCharacter pc in GameContent.partyCharacters)
 			{
 				sw.WriteLine($"{pc.classID},{pc.health},{pc.mana},{pc.strength},{pc.agility},{pc.wisdom}");
-                
-                foreach (int value in pc.equipment)
-                {
-                    sw.WriteLine($",{value}");
-                }
+
+				foreach (int value in pc.equipment)
+				{
+					sw.WriteLine($",{value}");
+				}
 				sw.WriteLine(); // change to next line
 			}
 		}
-    }
+	}
 
 	static public void LoadPartyButtonPressed()
-    {
-        GameContent.partyCharacters.Clear();
+	{
+		GameContent.partyCharacters.Clear();
 
-        if (File.Exists(partyDataFilePath))
-        {
-            using (StreamReader sr = new StreamReader(partyDataFilePath))
-            {
+		if (File.Exists(partyDataFilePath))
+		{
+			using (StreamReader sr = new StreamReader(partyDataFilePath))
+			{
 				string line;
 
-                while ((line = sr.ReadLine()) != null)
-                {
-                    string[] data = line.Split(',');
+				while ((line = sr.ReadLine()) != null)
+				{
+					string[] data = line.Split(',');
 
-                    if (data.Length == 6)
+					if (data.Length == 6)
 					{
 						int classID = int.Parse(data[0]);
 						int health = int.Parse(data[1]);
@@ -127,17 +126,14 @@ static public class AssignmentPart1
 					}
 				}
 			}
-        }
-        else 
-            Debug.Log("Failed to load file");
+		}
+		else
+			Debug.Log("Failed to load file");
 
 		GameContent.RefreshUI();
-    }
+	}
 }
-
-
 #endregion
-
 
 #region Assignment Part 2
 
@@ -146,80 +142,144 @@ static public class AssignmentPart1
 //  change the below value of AssignmentConfiguration.PartOfAssignmentInDevelopment from 1 to 2.
 //  This will enable the needed UI/function calls for your to proceed with your assignment.
 static public class AssignmentConfiguration
-{
-    public const int PartOfAssignmentThatIsInDevelopment = 1;
-}
+	{
+		public const int PartOfAssignmentThatIsInDevelopment = 2;
+	}
 
-/*
+	/*
 
-In this part of the assignment you are challenged to expand on the functionality that you have already created.  
-    You are being challenged to save, load and manage multiple parties.
-    You are being challenged to identify each party via a string name (a member of the Party class).
+	In this part of the assignment you are challenged to expand on the functionality that you have already created.  
+		You are being challenged to save, load and manage multiple parties.
+		You are being challenged to identify each party via a string name (a member of the Party class).
 
-To aid you in this challenge, the UI has been altered.  
+	To aid you in this challenge, the UI has been altered.  
 
-    The load button has been replaced with a drop down list.  
-    When this load party drop down list is changed, LoadPartyDropDownChanged(string selectedName) will be called.  
-    When this drop down is created, it will be populated with the return value of GetListOfPartyNames().
+		The load button has been replaced with a drop down list.  
+		When this load party drop down list is changed, LoadPartyDropDownChanged(string selectedName) will be called.  
+		When this drop down is created, it will be populated with the return value of GetListOfPartyNames().
 
-    GameStart() is called when the program starts.
+		GameStart() is called when the program starts.
 
-    For quality of life, a new SavePartyButtonPressed() has been provided to you below.
+		For quality of life, a new SavePartyButtonPressed() has been provided to you below.
 
-    An new/delete button has been added, you will also find below NewPartyButtonPressed() and DeletePartyButtonPressed()
+		An new/delete button has been added, you will also find below NewPartyButtonPressed() and DeletePartyButtonPressed()
 
-Again, you are being challenged to develop the ability to save and load multiple parties.
-    This challenge is different from the previous.
-    In the above challenge, what you had to develop was much more directly named.
-    With this challenge however, there is a much more predicate process required.
-    Let me ask you,
-        What do you need to program to produce the saving, loading and management of multiple parties?
-        What are the variables that you will need to declare?
-        What are the things that you will need to do?  
-    So much of development is just breaking problems down into smaller parts.
-    Take the time to name each part of what you will create and then, do it.
+	Again, you are being challenged to develop the ability to save and load multiple parties.
+		This challenge is different from the previous.
+		In the above challenge, what you had to develop was much more directly named.
+		With this challenge however, there is a much more predicate process required.
+		Let me ask you,
+			What do you need to program to produce the saving, loading and management of multiple parties?
+			What are the variables that you will need to declare?
+			What are the things that you will need to do?  
+		So much of development is just breaking problems down into smaller parts.
+		Take the time to name each part of what you will create and then, do it.
 
-Good luck, journey well.
+	Good luck, journey well.
 
-*/
+	*/
 
 static public class AssignmentPart2
 {
 
-    static List<string> listOfPartyNames;
+	static List<string> listOfPartyNames;
 
-    static public void GameStart()
-    {
-        listOfPartyNames = new List<string>();
-        listOfPartyNames.Add("sample 1");
-        listOfPartyNames.Add("sample 2");
-        listOfPartyNames.Add("sample 3");
+	static private string partyDataFilePath = "partyData.txt";
 
-        GameContent.RefreshUI();
-    }
+	static public void GameStart()
+	{
+		listOfPartyNames = new List<string>();
 
-    static public List<string> GetListOfPartyNames()
-    {
-        return listOfPartyNames;
-    }
+		GameContent.RefreshUI();
+	}
 
-    static public void LoadPartyDropDownChanged(string selectedName)
-    {
-        GameContent.RefreshUI();
-    }
+	static public List<string> GetListOfPartyNames()
+	{
+		return listOfPartyNames;
+	}
 
-    static public void SavePartyButtonPressed()
-    {
-        GameContent.RefreshUI();
-    }
+	static public void LoadPartyDropDownChanged(string selectedName)
+	{
+	//foreach (string partyName in listOfPartyNames)
+	GameContent.partyCharacters.Clear();
 
-    static public void DeletePartyButtonPressed()
-    {
-        GameContent.RefreshUI();
-    }
+	if (File.Exists(partyDataFilePath))
+	{
+		using (StreamReader sr = new StreamReader(partyDataFilePath))
+		{
+			string line;
 
+			while ((line = sr.ReadLine()) != null)
+			{
+				string[] data = line.Split(',');
+
+				int classID = int.Parse(data[0]);
+				int health = int.Parse(data[1]);
+				int mana = int.Parse(data[2]);
+				int strength = int.Parse(data[3]);
+				int agility = int.Parse(data[4]);
+				int wisdom = int.Parse(data[5]);
+
+				PartyCharacter pc = new PartyCharacter(classID, health, mana, strength, agility, wisdom);
+
+				// Read the equipment count
+				int equipmentCount = int.Parse(data[6]);
+
+				for (int i = 7; i < 7 + equipmentCount; i++)
+				{
+					int equip = int.Parse(data[i]);
+					pc.equipment.AddLast(equip);
+				}
+
+				GameContent.partyCharacters.AddLast(pc);
+			}
+		}
+	}
+	else
+	{
+		Debug.Log("Failed to load file");
+	}
+	GameContent.RefreshUI();
+	}
+
+	static public void SavePartyButtonPressed()
+	{
+		string newPartyName = GameContent.GetPartyNameFromInput();
+
+		if (string.IsNullOrEmpty(newPartyName)) // if string is empty 
+			return;
+
+		if (listOfPartyNames.Contains(newPartyName)) // if name is duplicate
+			return;
+
+		listOfPartyNames.Add(newPartyName);
+
+		using (StreamWriter sw = new StreamWriter(partyDataFilePath))
+		{
+			sw.WriteLine($"{newPartyName}, {GameContent.partyCharacters.Count}");
+			foreach (PartyCharacter pc in GameContent.partyCharacters)
+			{
+				string characterInfo = $"{pc.classID},{pc.health},{pc.mana},{pc.strength},{pc.agility},{pc.wisdom}";
+
+				characterInfo += $",{pc.equipment.Count}";
+
+				foreach (int equip in pc.equipment)
+					characterInfo += $",{equip}";
+
+				sw.WriteLine(characterInfo);
+			}
+		}
+
+		GameContent.RefreshUI();
+
+		Debug.Log(newPartyName + "has been added");
+	}
+
+	static public void DeletePartyButtonPressed()
+	{
+		GameContent.RefreshUI();
+	}
 }
-
 #endregion
 
 

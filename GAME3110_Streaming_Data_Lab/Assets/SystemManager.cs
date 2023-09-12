@@ -219,9 +219,7 @@ public class SystemManager : MonoBehaviour
 
     public string GetPartyNameFromInput()
     {
-
         return partyNameInputField.GetComponentsInChildren<Text>()[1].text;
-
     }
 
 }
