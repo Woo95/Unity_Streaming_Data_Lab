@@ -189,7 +189,7 @@ static public class AssignmentPart2
 	static public void GameStart()
 	{
 		listOfPartyNames = new List<string>();
-
+		StreamWriter sw = new StreamWriter(partyDataFilePath);
 		GameContent.RefreshUI();
 	}
 
@@ -200,46 +200,59 @@ static public class AssignmentPart2
 
 	static public void LoadPartyDropDownChanged(string selectedName)
 	{
-	//foreach (string partyName in listOfPartyNames)
-	GameContent.partyCharacters.Clear();
+		if (!listOfPartyNames.Contains(selectedName)) // if selectedParty is not contained in the dropdown
+			return;
 
-	if (File.Exists(partyDataFilePath))
-	{
-		using (StreamReader sr = new StreamReader(partyDataFilePath))
+		GameContent.partyCharacters.Clear();
+
+		if (File.Exists(partyDataFilePath))
 		{
-			string line;
-
-			while ((line = sr.ReadLine()) != null)
+			using (StreamReader sr = new StreamReader(partyDataFilePath))
 			{
-				string[] data = line.Split(',');
-
-				int classID = int.Parse(data[0]);
-				int health = int.Parse(data[1]);
-				int mana = int.Parse(data[2]);
-				int strength = int.Parse(data[3]);
-				int agility = int.Parse(data[4]);
-				int wisdom = int.Parse(data[5]);
-
-				PartyCharacter pc = new PartyCharacter(classID, health, mana, strength, agility, wisdom);
-
-				// Read the equipment count
-				int equipmentCount = int.Parse(data[6]);
-
-				for (int i = 7; i < 7 + equipmentCount; i++)
+				string line;
+				int playerInParty = 0;
+				while ((line = sr.ReadLine()) != null)
 				{
-					int equip = int.Parse(data[i]);
-					pc.equipment.AddLast(equip);
+					string[] data = line.Split(',');
+					
+					if (data[0] == selectedName && data.Length == 2)
+					{
+						playerInParty = int.Parse(data[1]);
+						break;
+					}
 				}
+				while ((line = sr.ReadLine()) != null && playerInParty > 0)
+				{
+					string[] data = line.Split(',');
 
-				GameContent.partyCharacters.AddLast(pc);
+					int classID = int.Parse(data[0]);
+					int health = int.Parse(data[1]);
+					int mana = int.Parse(data[2]);
+					int strength = int.Parse(data[3]);
+					int agility = int.Parse(data[4]);
+					int wisdom = int.Parse(data[5]);
+
+					PartyCharacter pc = new PartyCharacter(classID, health, mana, strength, agility, wisdom);
+
+					int equipmentCount = int.Parse(data[6]);
+
+					for (int i = 7; i < 7 + equipmentCount; i++)
+					{
+						int equip = int.Parse(data[i]);
+						pc.equipment.AddLast(equip);
+					}
+
+					GameContent.partyCharacters.AddLast(pc);
+
+					playerInParty--;
+				}
 			}
 		}
-	}
-	else
-	{
-		Debug.Log("Failed to load file");
-	}
-	GameContent.RefreshUI();
+		else
+		{
+			Debug.Log("Failed to load file");
+		}
+		GameContent.RefreshUI();
 	}
 
 	static public void SavePartyButtonPressed()
@@ -254,7 +267,7 @@ static public class AssignmentPart2
 
 		listOfPartyNames.Add(newPartyName);
 
-		using (StreamWriter sw = new StreamWriter(partyDataFilePath))
+		using (StreamWriter sw = new StreamWriter(partyDataFilePath, true))
 		{
 			sw.WriteLine($"{newPartyName}, {GameContent.partyCharacters.Count}");
 			foreach (PartyCharacter pc in GameContent.partyCharacters)
@@ -270,9 +283,11 @@ static public class AssignmentPart2
 			}
 		}
 
+		//GameContent.partyNameInputField.text = "";
+
 		GameContent.RefreshUI();
 
-		Debug.Log(newPartyName + "has been added");
+		Debug.Log(newPartyName + " has been added");
 	}
 
 	static public void DeletePartyButtonPressed()
