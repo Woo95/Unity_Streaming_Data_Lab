@@ -189,7 +189,7 @@ static public class AssignmentPart2
 	static public void GameStart()
 	{
 		listOfPartyNames = new List<string>();
-		StreamWriter sw = new StreamWriter(partyDataFilePath);
+		StreamWriter sw = new StreamWriter(partyDataFilePath); // refreshes partyData whenever restarting unity play
 		GameContent.RefreshUI();
 	}
 
@@ -326,42 +326,3 @@ static public class AssignmentPart2
 	}
 }
 #endregion
-
-
-/*
- listOfPartyNames.Remove(partyNameToDelete);
-
-		string originalFilePath = "partyData.txt";
-		string temporaryFilePath = "temp.txt";
-
-		using (StreamReader sr = new StreamReader(originalFilePath))
-		using (StreamWriter sw = new StreamWriter(temporaryFilePath))
-		{
-			string line;
-			int playerInParty = 0;
-			bool isDeletingPartyData = false;
-			while ((line = sr.ReadLine()) != null)
-			{
-				string[] data = line.Split(',');
-				if (data[0] == partyNameToDelete && data.Length == 2) // if partyNameToDelete from the txt has been found
-				{
-					playerInParty = int.Parse(data[1]);
-					isDeletingPartyData = true;
-					continue;
-				}
-				else if (isDeletingPartyData) // continues to skip lines that has to be deleted
-				{
-					if (playerInParty <= 0)
-						isDeletingPartyData = false;
-					else
-						playerInParty--;
-					continue;
-				}
-				sw.WriteLine(line);
-			}
-		}
-		File.Delete(originalFilePath);
-		File.Move(temporaryFilePath, originalFilePath);
-
-		GameContent.RefreshUI();
- */
