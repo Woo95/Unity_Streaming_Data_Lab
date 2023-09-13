@@ -260,14 +260,19 @@ static public class AssignmentPart2
 		string newPartyName = GameContent.GetPartyNameFromInput();
 
 		if (string.IsNullOrEmpty(newPartyName)) // if string is empty 
+		{
+			Debug.Log("Failed to save - empty input");
 			return false;
-
+		}
 		if (listOfPartyNames.Contains(newPartyName)) // if name is duplicate
+		{
+			Debug.Log("Failed to save - party name exist");
 			return false;
+		}
 
 		listOfPartyNames.Add(newPartyName);
 
-		using (StreamWriter sw = new StreamWriter(partyDataFilePath, true))
+		using (StreamWriter sw = new StreamWriter(partyDataFilePath, true)) // true makes the txt continuous from the previous txt
 		{
 			sw.WriteLine($"{newPartyName}, {GameContent.partyCharacters.Count}");
 			foreach (PartyCharacter pc in GameContent.partyCharacters)
