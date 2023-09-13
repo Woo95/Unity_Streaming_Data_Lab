@@ -283,18 +283,85 @@ static public class AssignmentPart2
 			}
 		}
 
-		//GameContent.partyNameInputField.text = "";
-
 		GameContent.RefreshUI();
 
 		Debug.Log(newPartyName + " has been added");
 	}
 
-	static public void DeletePartyButtonPressed()
+	static public void DeletePartyButtonPressed(string partyNameToDelete)
 	{
+		if (string.IsNullOrEmpty(partyNameToDelete) || !listOfPartyNames.Contains(partyNameToDelete))
+			return; // if the party name is empty or not found in the list, skip
+
+
+		listOfPartyNames.Remove(partyNameToDelete);
+
+		string originalFilePath = "partyData.txt";
+		string temporaryFilePath = "temp.txt";
+
+		using (StreamReader sr = new StreamReader(originalFilePath))
+		using (StreamWriter sw = new StreamWriter(temporaryFilePath))
+		{
+			string line;
+			int playerInDeleteParty = 0;
+			while ((line = sr.ReadLine()) != null)
+			{
+				string[] data = line.Split(',');
+				if (data[0] == partyNameToDelete && data.Length == 2) // if partyNameToDelete from the txt has been found
+				{
+					playerInDeleteParty = int.Parse(data[1]);
+					for (int i=0; i< playerInDeleteParty; i++) // deletes the player in the party that has to be deleted
+					{
+						line = sr.ReadLine();
+					}
+					continue;
+				}
+				sw.WriteLine(line);
+			}
+		}
+		File.Delete(originalFilePath);
+		File.Move(temporaryFilePath, originalFilePath);
+
 		GameContent.RefreshUI();
 	}
 }
 #endregion
 
 
+/*
+ listOfPartyNames.Remove(partyNameToDelete);
+
+		string originalFilePath = "partyData.txt";
+		string temporaryFilePath = "temp.txt";
+
+		using (StreamReader sr = new StreamReader(originalFilePath))
+		using (StreamWriter sw = new StreamWriter(temporaryFilePath))
+		{
+			string line;
+			int playerInParty = 0;
+			bool isDeletingPartyData = false;
+			while ((line = sr.ReadLine()) != null)
+			{
+				string[] data = line.Split(',');
+				if (data[0] == partyNameToDelete && data.Length == 2) // if partyNameToDelete from the txt has been found
+				{
+					playerInParty = int.Parse(data[1]);
+					isDeletingPartyData = true;
+					continue;
+				}
+				else if (isDeletingPartyData) // continues to skip lines that has to be deleted
+				{
+					if (playerInParty <= 0)
+						isDeletingPartyData = false;
+					else
+						playerInParty--;
+					continue;
+				}
+				sw.WriteLine(line);
+			}
+		}
+		File.Delete(originalFilePath);
+		File.Move(temporaryFilePath, originalFilePath);
+
+		GameContent.RefreshUI();
+ */

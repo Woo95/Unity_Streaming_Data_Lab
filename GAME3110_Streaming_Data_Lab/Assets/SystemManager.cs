@@ -176,9 +176,9 @@ public class SystemManager : MonoBehaviour
 
     }
 
-    public void RerollButtonPressed()
-    {
-        GameContent.RerollParty();
+    public void RerollButtonPressed() // reroll party make the dropdown blank
+	{
+		GameContent.RerollParty();
         RefreshUI();
     }
 
@@ -227,7 +227,10 @@ public class SystemManager : MonoBehaviour
 
     public void DeleteButtonPressed()
     {
-        AssignmentPart2.DeletePartyButtonPressed();
+		Dropdown dropdown = loadPartyDropDown.GetComponent<Dropdown>();
+        string partyNameToDelete = dropdown.GetComponentInChildren<Text>().text;
+
+		AssignmentPart2.DeletePartyButtonPressed(partyNameToDelete);
     }
 
     public string GetPartyNameFromInput()
