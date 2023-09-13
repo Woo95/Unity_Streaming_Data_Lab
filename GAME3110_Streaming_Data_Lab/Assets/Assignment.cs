@@ -255,15 +255,15 @@ static public class AssignmentPart2
 		GameContent.RefreshUI();
 	}
 
-	static public void SavePartyButtonPressed()
+	static public bool SavePartyButtonPressed()
 	{
 		string newPartyName = GameContent.GetPartyNameFromInput();
 
 		if (string.IsNullOrEmpty(newPartyName)) // if string is empty 
-			return;
+			return false;
 
 		if (listOfPartyNames.Contains(newPartyName)) // if name is duplicate
-			return;
+			return false;
 
 		listOfPartyNames.Add(newPartyName);
 
@@ -286,12 +286,14 @@ static public class AssignmentPart2
 		GameContent.RefreshUI();
 
 		Debug.Log(newPartyName + " has been added");
+
+		return true;
 	}
 
-	static public void DeletePartyButtonPressed(string partyNameToDelete)
+	static public bool DeletePartyButtonPressed(string partyNameToDelete)
 	{
 		if (string.IsNullOrEmpty(partyNameToDelete) || !listOfPartyNames.Contains(partyNameToDelete))
-			return; // if the party name is empty or not found in the list, skip
+			return false; // if the party name is empty or not found in the list, skip
 
 
 		listOfPartyNames.Remove(partyNameToDelete);
@@ -320,9 +322,13 @@ static public class AssignmentPart2
 			}
 		}
 		File.Delete(originalFilePath);
-		File.Move(temporaryFilePath, originalFilePath);
+		File.Move(temporaryFilePath, originalFilePath); // move temp.txt to partyData.txt
 
 		GameContent.RefreshUI();
+
+		Debug.Log(partyNameToDelete + " has been deleted");
+
+		return true;
 	}
 }
 #endregion
