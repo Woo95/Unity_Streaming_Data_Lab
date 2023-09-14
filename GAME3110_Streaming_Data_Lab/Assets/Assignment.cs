@@ -190,6 +190,7 @@ static public class AssignmentPart2
 	{
 		listOfPartyNames = new List<string>();
 		StreamWriter sw = new StreamWriter(partyDataFilePath); // refreshes partyData whenever restarting unity play
+		listOfPartyNames.Add("select a party");
 		GameContent.RefreshUI();
 	}
 
@@ -200,7 +201,8 @@ static public class AssignmentPart2
 
 	static public void LoadPartyDropDownChanged(string selectedName)
 	{
-		if (!listOfPartyNames.Contains(selectedName)) // if selectedParty is not contained in the dropdown
+		// if selectedParty is not contained in the dropdown
+		if (!listOfPartyNames.Contains(selectedName)) 
 			return;
 
 		GameContent.partyCharacters.Clear();
@@ -259,6 +261,7 @@ static public class AssignmentPart2
 	{
 		string newPartyName = GameContent.GetPartyNameFromInput();
 
+		#region exceptions
 		if (string.IsNullOrEmpty(newPartyName)) // if string is empty 
 		{
 			Debug.Log("Failed to save - empty input");
@@ -274,6 +277,7 @@ static public class AssignmentPart2
 			Debug.Log("Failed to save - party doesn't exist");
 			return false;
 		}
+		#endregion
 
 		listOfPartyNames.Add(newPartyName);
 
@@ -292,7 +296,6 @@ static public class AssignmentPart2
 				sw.WriteLine(characterInfo);
 			}
 		}
-
 		GameContent.RefreshUI();
 
 		Debug.Log(newPartyName + " has been added");
@@ -302,9 +305,15 @@ static public class AssignmentPart2
 
 	static public bool DeletePartyButtonPressed(string partyNameToDelete)
 	{
+		// if the party name is empty or not found in the list - *most likely not happens* 
 		if (string.IsNullOrEmpty(partyNameToDelete) || !listOfPartyNames.Contains(partyNameToDelete))
-			return false; // if the party name is empty or not found in the list, skip
+			return false;
 
+		if (partyNameToDelete == "select a party")
+		{
+			Debug.Log("Failed to delete - no party to delete");
+			return false;
+		}
 
 		listOfPartyNames.Remove(partyNameToDelete);
 

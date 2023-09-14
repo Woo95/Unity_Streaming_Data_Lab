@@ -176,18 +176,16 @@ public class SystemManager : MonoBehaviour
 
     }
 
-    public void RerollButtonPressed()  // TODO: need to unselect everything from the option
+    public void UnSelectPartyDropDown()
+    {
+		Dropdown dropdown = loadPartyDropDown.GetComponent<Dropdown>();
+		dropdown.value = 0;
+	}
+
+	public void RerollButtonPressed()
 	{
-        Dropdown dropdown = loadPartyDropDown.GetComponent<Dropdown>();
-
-        //dropdown.ClearOptions();
-		//dropdown.AddOptions(new List<string> { "Select party" });
-		//dropdown.options.Insert(0, new Dropdown.OptionData("Select Party"));
-		//dropdown.value = 0;
-		//dropdown.GetComponentInChildren<Text>().text = "";
-
+		UnSelectPartyDropDown();
 		GameContent.RerollParty();
-
 		RefreshUI();
 	}
 
@@ -221,10 +219,9 @@ public class SystemManager : MonoBehaviour
 		// Get the text input field component
 		InputField inputField = partyNameInputField.GetComponent<InputField>();
 
-		// update dropdown label text to the inputField text
 		Dropdown dropdown = loadPartyDropDown.GetComponent<Dropdown>();
+		// update dropdown label text to the inputField text
 		dropdown.GetComponentInChildren<Text>().text = inputField.text;
-
 		// update to current dropdown option from the options
 		dropdown.value = dropdown.options.Count;
 
@@ -241,10 +238,11 @@ public class SystemManager : MonoBehaviour
     {
 		Dropdown dropdown = loadPartyDropDown.GetComponent<Dropdown>();
 
-        string partyNameToDelete = dropdown.GetComponentInChildren<Text>().text;
+		// save dropdown label text to the partyNameToDelete
+		string partyNameToDelete = dropdown.GetComponentInChildren<Text>().text;
 
 		if (AssignmentPart2.DeletePartyButtonPressed(partyNameToDelete))
-			dropdown.GetComponentInChildren<Text>().text = "";
+			UnSelectPartyDropDown();
 	}
 
 	public string GetPartyNameFromInput()
