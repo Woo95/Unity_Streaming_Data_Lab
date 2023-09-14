@@ -269,6 +269,11 @@ static public class AssignmentPart2
 			Debug.Log("Failed to save - party name exist");
 			return false;
 		}
+		if (GameContent.partyCharacters.Count <= 0)  // if no party exist
+		{
+			Debug.Log("Failed to save - party doesn't exist");
+			return false;
+		}
 
 		listOfPartyNames.Add(newPartyName);
 
@@ -329,6 +334,7 @@ static public class AssignmentPart2
 		File.Delete(originalFilePath);
 		File.Move(temporaryFilePath, originalFilePath); // move temp.txt to partyData.txt
 
+		GameContent.partyCharacters.Clear();
 		GameContent.RefreshUI();
 
 		Debug.Log(partyNameToDelete + " has been deleted");
