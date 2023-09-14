@@ -262,14 +262,24 @@ static public class AssignmentPart2
 		string newPartyName = GameContent.GetPartyNameFromInput();
 
 		#region exceptions
-		if (string.IsNullOrEmpty(newPartyName)) // if string is empty 
+		if (string.IsNullOrEmpty(newPartyName)) // if party name is empty 
 		{
 			Debug.Log("Failed to save - empty input");
 			return false;
 		}
-		if (listOfPartyNames.Contains(newPartyName)) // if name is duplicate
+		if (listOfPartyNames.Contains(newPartyName)) // if party name is duplicate
 		{
 			Debug.Log("Failed to save - party name exist");
+			return false;
+		}
+		if (newPartyName.Contains(",")) // if comma is abused
+		{
+			Debug.Log("Failed to save - party name cannot contain a comma");
+			return false;
+		}
+		if (newPartyName.Contains(" ")) //  no space allowed
+		{
+			Debug.Log("Failed to save - party name cannot contain spaces");
 			return false;
 		}
 		if (GameContent.partyCharacters.Count <= 0)  // if no party exist
