@@ -234,7 +234,7 @@ public class SystemManager : MonoBehaviour
         //AssignmentPart2.NewPartyButtonPressed();
     }
 
-    public void DeleteButtonPressed() // TODO: need to unselect everything from the option
+    public void DeleteButtonPressed()
     {
 		Dropdown dropdown = loadPartyDropDown.GetComponent<Dropdown>();
 
