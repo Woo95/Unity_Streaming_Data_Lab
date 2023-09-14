@@ -179,10 +179,14 @@ public class SystemManager : MonoBehaviour
     public void RerollButtonPressed()  // TODO: need to unselect everything from the option
 	{
         Dropdown dropdown = loadPartyDropDown.GetComponent<Dropdown>();
-        //dropdown.value = -1;// unselect all the dropdown options
-        dropdown.GetComponentInChildren<Text>().text = "";
 
-        GameContent.RerollParty();
+        //dropdown.ClearOptions();
+		//dropdown.AddOptions(new List<string> { "Select party" });
+		//dropdown.options.Insert(0, new Dropdown.OptionData("Select Party"));
+		//dropdown.value = 0;
+		//dropdown.GetComponentInChildren<Text>().text = "";
+
+		GameContent.RerollParty();
 
 		RefreshUI();
 	}
@@ -200,8 +204,10 @@ public class SystemManager : MonoBehaviour
 
     public void LoadDropDownChanged()
     {
-        int menuIndex = loadPartyDropDown.GetComponent<Dropdown>().value;
-        List<Dropdown.OptionData> menuOptions = loadPartyDropDown.GetComponent<Dropdown>().options;
+        Dropdown dropdown = loadPartyDropDown.GetComponent<Dropdown>();
+
+        int menuIndex = dropdown.value;
+        List<Dropdown.OptionData> menuOptions = dropdown.options;
         string value = menuOptions[menuIndex].text;
         AssignmentPart2.LoadPartyDropDownChanged(value);
     }
